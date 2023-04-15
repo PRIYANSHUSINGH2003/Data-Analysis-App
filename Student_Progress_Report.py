@@ -5,6 +5,40 @@ from streamlit_pandas_profiling import st_profile_report
 from PIL import Image
 import numpy as np
 
+# //////////////////////////////
+
+
+# Set the page title
+st.set_page_config(page_title="My Dashboard")
+
+# Add a title
+st.title("My Dashboard")
+
+# Add a sidebar with options
+option = st.sidebar.selectbox(
+    'Which option do you like best?',
+    ('Option 1', 'Option 2', 'Option 3')
+)
+
+# Add a slider
+x = st.slider('Select a value')
+
+# Add a chart
+st.line_chart(np.random.randn(10, x))
+
+# Add a table
+df = pd.DataFrame({
+    'first column': [1, 2, 3, 4],
+    'second column': [10, 20, 30, 40]
+})
+st.write(df)
+
+
+# /////////////////////////////
+
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+
 st.header("The Importance of Data Analysis in Business Decision Making ")
 st.markdown("This data analysis project involves transforming progress reports in CSV or Excel sheet format into a more easily understandable and visual format. The project likely involves using specialized software or programming tools to convert the data into graphical or tabular form.")
 st.markdown("The first step in this project is likely to import the raw data from the progress reports into the data analysis tool. Once the data is loaded, the next step is to clean and manipulate the data to ensure that it is consistent and accurate.")
