@@ -4,13 +4,13 @@ from pandas_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 from PIL import Image
 import numpy as np
+import plotly.figure_factory as ff
 
-# //////////////////////////////
 
 
 # Set the page title
-st.set_page_config(page_title="My Dashboard")
 
+st.set_page_config(page_title="My Data Progress Report")
 # Add a title
 st.title("My Dashboard")
 
@@ -27,6 +27,8 @@ x = st.slider('Select a value')
 st.line_chart(np.random.randn(10, x))
 
 # Add a table
+cards1, cards2= st.columns(2)
+
 df = pd.DataFrame({
     'first column': [1, 2, 3, 4],
     'second column': [10, 20, 30, 40]
@@ -34,10 +36,30 @@ df = pd.DataFrame({
 st.write(df)
 
 
+
+x1 = np.random.randn(200) - 2
+x2 = np.random.randn(200)
+x3 = np.random.randn(200) + 2
+hist_data = [x1, x2, x3]
+
+group_labels = ['Group 1', 'Group 2', 'Group 3']
+fig = ff.create_distplot(
+        hist_data, group_labels, bin_size=[.1, .25, .5])
+
+# Plot!
+st.plotly_chart(fig, use_container_width=True)
+
+
 # /////////////////////////////
+
+
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+
+st.header('Data Progress Report')
+st.subheader('This report shows the progress of data cleaning and analysis.')
+st.markdown('<div class="text-overlay">Data Processing</div>', unsafe_allow_html=True)
 
 st.header("The Importance of Data Analysis in Business Decision Making ")
 st.markdown("This data analysis project involves transforming progress reports in CSV or Excel sheet format into a more easily understandable and visual format. The project likely involves using specialized software or programming tools to convert the data into graphical or tabular form.")
@@ -79,20 +101,22 @@ video_data4.video(vid3)
 
 with st.sidebar.header('1. Upload your CSV data'):
     uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
-    st.sidebar.markdown("")
 
 #pandas profiling report data
 if uploaded_file is not None:
+    progress_bar = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
     @st.cache
     def load_csv_data():
         csv_data = pd.read_csv(uploaded_file)
         return csv_data
     df = load_csv_data()
+    progress_bar.empty()
     pr = ProfileReport(df, explorative = True)
-    st.header("***** View Your Data *****")
+    st.header("View Your Data.....")
+    st.code("loading.....!")
     st.write(df)
     st.write('---')
-    st.header("***** Pandas Profiling Report *****")
+    st.header("Pandas Profiling Report....!")
     st_profile_report(pr)
 else:
     st.info('Awaiting for CSV file to be uploaded.')
@@ -107,11 +131,25 @@ else:
             return a
         df = load_Csv()
         pr = ProfileReport(df, explorative=True)
-        st.header("****** Input DataFrame ******")
+        st.header("Input DataFrame.....!")
+        st.code("loading.....!")
         st.write(df)
         st.write('-----')
-        st.header("*********  Pandas Data ************")
+        st.header("Normal Data.....!")
         st_profile_report(pr)
+
+programmer_name = "Priyanshu Singh"
+
+# Add the programmer name with animation to the sidebar
+st.sidebar.markdown(f"""
+    <div class="animated fadeInDown" style="animation-delay: 0.5s;">
+        <h3>Programmed by:</h3>
+        <p style="font-size: 24px; font-weight: bold; color: #f3725b;">{programmer_name}</p>
+    </div>
+""", unsafe_allow_html=True)
+
+
+st.markdown('<div class="footer">This is a Streamlit app for uploading and displaying CSV data.</div>', unsafe_allow_html=True)
 # # print(df)
 
 # # Generatew a report
