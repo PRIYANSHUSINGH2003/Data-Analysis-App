@@ -10,7 +10,7 @@ body {
 .text-overlay {
     position: relative;
     display: inline-block;
-    font-size: 2em;
+    font-size: 2.3em;
     color: #FFF;
     font-weight: bold;
     text-transform: uppercase;
@@ -20,7 +20,7 @@ body {
 /* Animate the text overlay */
 @keyframes animateText {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-50px); }
+    50% { transform: translateY(-40px); }
     100% { transform: translateY(0); }
 }
 /* Animate the body background */
