@@ -1,179 +1,169 @@
-import pandas as pd
-import streamlit as st
-from pandas_profiling import ProfileReport
-from streamlit_pandas_profiling import st_profile_report
-from PIL import Image
-import numpy as np
-import plotly.figure_factory as ff
+
+import pyttsx3  # pip install pyttsx3
+import speech_recognition as sr  # pip install speechRecognition
+import datetime
+import wikipedia  # pip install wikipedia
+import webbrowser
+import os
+import smtplib
+import cv2
+import random
+from requests import get
+import smtplib
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+# print(voices[1].id)
+engine.setProperty('voice', voices[0].id)
 
 
-
-# Set the page title
-logo = Image.open("images/Logo.png")
-st.set_page_config(page_title='~AnalysisMaster',page_icon=logo,layout="wide")
-# Add a title
-st.title("My Dashboard")
-
-# Add a sidebar with options
-option = st.sidebar.selectbox(
-    'Which option do you like best?',
-    ('Option 1', 'Option 2', 'Option 3')
-)
-
-# Add a slider
-x = st.slider('Select a value')
-
-# Add a chart
-st.line_chart(np.random.randn(10, x))
-
-# Add a table
-cards1, cards2= st.columns(2)
-
-df = pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-})
-st.write(df)
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
 
 
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if hour >= 0 and hour < 12:
+        speak("Good Morning!")
 
-x1 = np.random.randn(200) - 2
-x2 = np.random.randn(200)
-x3 = np.random.randn(200) + 2
-hist_data = [x1, x2, x3]
+    elif hour >= 12 and hour < 18:
+        speak("Good Afternoon!")
 
-group_labels = ['Group 1', 'Group 2', 'Group 3']
-fig = ff.create_distplot(
-        hist_data, group_labels, bin_size=[.1, .25, .5])
+    else:
+        speak("Good Evening!")
 
-# Plot!
-st.plotly_chart(fig, use_container_width=True)
-
-
-# /////////////////////////////
+    speak("I am Jarvis Sir. Please tell me how may I help you")
 
 
+def takeCommand():
+    # It takes microphone input from the user and returns string output
 
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
 
-st.header('Data Progress Report')
-st.subheader('A data progress report shows that the progress of analyzing and cleaning the data. It is a report in which you are updating information about a project. The typical progress report give some summary of the project goal, states the progress made toward that goal during the reporting period.')
-st.markdown('<div class="text-overlay">Data Processing</div>', unsafe_allow_html=True)
-st.markdown("### What does a  Data Analyst do?")
-st.write("A data analyst is a professional who extracts, interprets, and processes large volumes of data to identify patterns, trends and insights to help organizations make informed decisions. They use statistical and analytical methods to analyze complex data sets and transform information into meaningful reports, graphs and presentations. Data analysts work in a variety of industries to optimize performance, measure effectiveness and identify areas for improvement. They must possess strong communication skills to articulate data insights to business leaders, and technical skills to utilize software and programming languages such as SQL, Python, and R.")
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(audio, language='en-in')
+        print(f"User said: {query}\n")
 
-st.header("The Importance of Data Analysis in Business Decision Making ")
-st.markdown("Data analysis is giving small businesses the opportunity to be even more competitive through the use of analytics.")
-st.markdown("One of the importance is it increased transparency  and accountability of the organization.")
-
-chart1, chart2 = st.columns(2)
-chart_data = pd.DataFrame(
-    np.random.randn(20,3),
-    columns=['a','b','c']
-)
-chart1.bar_chart(chart_data)
-chart2.line_chart(chart_data)
-st.markdown("They can help companies make informed decision by identifying patterns and trends in data that can help to improve business operations and increase efficiency or reduce costs.")
-st.markdown("Data analysis can help companies measure the effectiveness of their marketing campaigns , customer engagement strategies and other business initiatives.")
-
-# image
-st.markdown("### Data Analyze")
-img1 , img2 = st.columns(2)
-image_data1 = Image.open('images/data1.png')
-image_data2 = Image.open('images/data2.jpg')
-img1.image(image_data1, width=None,caption='Data Analyze')
-img2.image(image_data2, width=None,caption='Data Structure')
-
-# st.image(image_url, )
-st.markdown("Finally, the data analysis project will culminate in the creation of a report or dashboard that presents the findings of the analysis in an easily understandable format. The report may include visualizations, key insights, and recommendations based on the findings of the analysis.")
-st.markdown("Overall, this data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.")
-
-#  video
-video_data1 , video_data2 , video_data3 , video_data4 = st.columns(4)
-vid = open('dashboard-data.mp4','rb').read()
-vid1= open('network.mp4','rb').read()
-vid2= open('evaluation.mp4','rb').read()
-vid3= open('data.mp4','rb').read()
-
-video_data1.video(vid)
-video_data2.video(vid1)
-video_data3.video(vid2)
-video_data4.video(vid3)
-
-st.subheader("How this website works?")
-st.markdown("On of the most important thing about this website is it significantly reduce the time and effort required to analyze the dataset. This is huge time saver and allows me to focus on other aspects of my work.")
-st.markdown("This data analysis project involves transforming your Excel sheet and CSV file format into simple and understanding form and also gives a perfect format. The main aim of this project is to convert the data into graphical, tabular form or pie chart form.")
-st.markdown("""
+    except Exception as e:
+        # print(e)
+        print("Say that again please...")
+        return "None"
+    return query
 
 
-##### Step 1:- It Import the CSV data from the progress report into the data analysis tool.
-            
-##### Step 2:- Once the data is loaded, than other step is to clean and manipulate the data is to ensure that the data is accurate and consistent or not.
-            
-##### Step 3:- Next, the data will be transformed into a more visual format, such as graphs or tabular form. The goal is to make it easier for stakeholders to understand the information and see patterns and trends in the data.
-            
-##### Step 4:- Once the data is transformed, the analyst will likely carry out exploratory data analysis to identify any outliers, trends, or patterns in the data. This will help to identify any areas of concern or opportunity that need to be addressed. The report may include visualizations, key insights, and recommendations based on the findings of the analysis.
-            
-##### Step 5:- Data visualization helps to tell stories by curating data into format that’s easier to understand. Effective data visualization is a delicate balancing act between form and function.
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('priyanshusingh0000@gmial.com', 'ishu@123')
+    server.sendmail('brijbhansingh195@gmail.com', to, content)
+    server.close()
 
 
-    #### Conclusion:- This data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.
-            """)
+if __name__ == "__main__":
+    wishMe()
+    while True:
+        query = takeCommand().lower()
+        # Logic for executing tasks based on query
+        if 'wikipedia' in query:
+            speak('Searching Wikipedia...')
+            query = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
 
-with st.sidebar.header('1. Upload your CSV data'):
-    uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
+        elif 'open youtube' in query:
+            webbrowser.open("youtube.com")
 
-#pandas profiling report data
-if uploaded_file is not None:
-    progress_bar = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
-    @st.cache
-    def load_csv_data():
-        csv_data = pd.read_csv(uploaded_file)
-        return csv_data
-    df = load_csv_data()
-    progress_bar.empty()
-    pr = ProfileReport(df, explorative = True)
-    st.header("View Your Data.....")
-    st.code("loading.....!")
-    st.write(df)
-    st.write('---')
-    st.header("Progress Report Showing Now....!")
-    st_profile_report(pr)
-else:
-    st.info('Awaiting for CSV file to be uploaded.')
-    if st.button('Press to use Example Dataset'):
-        # Example dara
-        @st.cache
-        def load_Csv():
-            a = pd.DataFrame(
-                np.random.randn(100,8),
-                columns=['a','b','c','d','e','f','g','h']
-            )
-            return a
-        df = load_Csv()
-        pr = ProfileReport(df, explorative=True)
-        st.header("Input DataFrame.....!")
-        st.code("loading.....!")
-        st.write(df)
-        st.write('-----')
-        st.header("Normal Data.....!")
-        st_profile_report(pr)
+        # elif 'play music' in query:
+        #     music_dir = 'D:\\Non Critical\\songs\\Favorite Songs2'
+        #     songs = os.listdir(music_dir)
+        #     rd = random.choice(songs)
+        #     for song in songs:
+        #         if song.endswith('.mp3'):
+        #             os.startfile(os.path.join(music_dir, song))
 
-programmer_name = "Priyanshu Singh"
+        elif "ip address" in query:
+            ip = get('https://api.ipify.org').text
+            speak(f"your IP address is{ip}")
 
-# Add the programmer name with animation to the sidebar
-st.sidebar.markdown(f"""
-    <div class="animated fadeInDown" style="animation-delay: 0.5s;">
-        <h3>Programmed by:</h3>
-        <p style="font-size: 24px; font-weight: bold; color: #f3725b;">{programmer_name}</p>
-    </div>
-""", unsafe_allow_html=True)
+        elif 'hello' in query:
+            speak("Hello sir How can help you")
 
+        elif 'nothing' in query:
+            speak("Ok sir ")
 
-st.markdown('<div class="footer">This is a Streamlit app for uploading and displaying CSV data.</div>', unsafe_allow_html=True)
-# # print(df)
+        elif 'how are you jarvis' in query:
+            speak("I am fine Sir")
 
-# # Generatew a report
-# profile = ProfileReport(df)
-# profile.to_file(output_file = "students - Sheet1.html")
+        elif 'time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir, the time is {strTime}")
+
+        elif 'open vs code' in query:
+            codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
+
+        elif 'open telegram' in query:
+            teleGram = "C:\\Users\\HP\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe"
+            os.startfile(teleGram)
+
+        elif 'open notepad' in query:
+            notepad = "C:\\Windows\\system32"
+            os.startfile(notepad)
+
+        elif 'open microsoft edge' in query:
+            edge = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+            os.startfile(edge)
+
+        elif 'open chrome' in query:
+            ChromeSearch = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+            os.startfile(ChromeSearch)
+
+        elif "youtube search" in query:
+            Query = query.replace("jarvis", "")
+            query = Query.replace("youtube search", "")
+            from Features import YouTubeSearch
+            YouTubeSearch(query)
+
+        elif "search" in query:
+            Query = query.replace("jarvis", "")
+            query = Query.replace(" search", "")
+            from Features import Search
+            Search(query)
+
+        elif "open google" in query:
+            speak("Sir, what should I search on google")
+            cm = takeCommand().lower()
+            webbrowser.open(f"{cm}")
+
+        elif "open camera" in query:
+            cap = cv2.VideoCapture(0)
+            while True:
+                ret, img = cap.read()
+                cv2.imshow('webcam', img)
+                if cv2.waitKey(1) & 0xff == ord('c'):
+                    break
+            cap.release()
+            cv2.destroyAllWindows()
+
+        elif 'open command prompt' in query:
+            os.system("start cmd")
+
+        elif 'email to priyanshu' in query:
+            try:
+                speak("What should I say?")
+                content = takeCommand()
+                to = "priyanshusingh00004@gmail.com"
+                sendEmail(to, content)
+                speak("Email has been sent!")
+            except Exception as e:
+                print(e)
+                speak("Sorry my friend priyanshu bhai. I am not able to send this email")
