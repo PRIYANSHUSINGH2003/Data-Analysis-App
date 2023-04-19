@@ -105,6 +105,8 @@ st.subheader("How this website works?")
 st.markdown("On of the most important thing about this website is it significantly reduce the time and effort required to analyze the dataset. This is huge time saver and allows me to focus on other aspects of my work.")
 st.markdown("This data analysis project involves transforming your Excel sheet and CSV file format into simple and understanding form and also gives a perfect format. The main aim of this project is to convert the data into graphical, tabular form or pie chart form.")
 st.markdown("""
+
+
 ##### Step 1:- It Import the CSV data from the progress report into the data analysis tool.
             
 ##### Step 2:- Once the data is loaded, than other step is to clean and manipulate the data is to ensure that the data is accurate and consistent or not.
@@ -116,7 +118,7 @@ st.markdown("""
 ##### Step 5:- Data visualization helps to tell stories by curating data into format that’s easier to understand. Effective data visualization is a delicate balancing act between form and function.
 
 
-Conclusion:- This data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.
+    #### Conclusion:- This data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.
             """)
 
 with st.sidebar.header('1. Upload your CSV data'):
