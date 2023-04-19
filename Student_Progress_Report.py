@@ -138,7 +138,7 @@ if uploaded_file is not None:
     st.code("loading.....!")
     st.write(df)
     st.write('---')
-    st.header("Pandas Profiling Report....!")
+    st.header("Progress Report Showing Now....!")
     st_profile_report(pr)
 else:
     st.info('Awaiting for CSV file to be uploaded.')
