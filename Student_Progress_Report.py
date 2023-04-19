@@ -7,8 +7,6 @@ import numpy as np
 import plotly.figure_factory as ff
 import pyttsx3
 import datetime
-import comtypes.client
-from _ctypes import _ctypes
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
