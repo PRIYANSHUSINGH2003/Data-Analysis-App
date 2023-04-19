@@ -9,8 +9,8 @@ import plotly.figure_factory as ff
 
 
 # Set the page title
-
-st.set_page_config(page_title="My Data Progress Report")
+logo = Image.open("images/Logo.png")
+st.set_page_config(page_title='~AnalysisMaster',page_icon=logo,layout="wide")
 # Add a title
 st.title("My Dashboard")
 
@@ -58,12 +58,14 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
 
 st.header('Data Progress Report')
-st.subheader('This report shows the progress of data cleaning and analysis.')
+st.subheader('A data progress report shows that the progress of analyzing and cleaning the data. It is a report in which you are updating information about a project. The typical progress report give some summary of the project goal, states the progress made toward that goal during the reporting period.')
 st.markdown('<div class="text-overlay">Data Processing</div>', unsafe_allow_html=True)
+st.markdown("### What does a  Data Analyst do?")
+st.write("A data analyst is a professional who extracts, interprets, and processes large volumes of data to identify patterns, trends and insights to help organizations make informed decisions. They use statistical and analytical methods to analyze complex data sets and transform information into meaningful reports, graphs and presentations. Data analysts work in a variety of industries to optimize performance, measure effectiveness and identify areas for improvement. They must possess strong communication skills to articulate data insights to business leaders, and technical skills to utilize software and programming languages such as SQL, Python, and R.")
 
 st.header("The Importance of Data Analysis in Business Decision Making ")
-st.markdown("This data analysis project involves transforming progress reports in CSV or Excel sheet format into a more easily understandable and visual format. The project likely involves using specialized software or programming tools to convert the data into graphical or tabular form.")
-st.markdown("The first step in this project is likely to import the raw data from the progress reports into the data analysis tool. Once the data is loaded, the next step is to clean and manipulate the data to ensure that it is consistent and accurate.")
+st.markdown("Data analysis is giving small businesses the opportunity to be even more competitive through the use of analytics.")
+st.markdown("One of the importance is it increased transparency  and accountability of the organization.")
 
 chart1, chart2 = st.columns(2)
 chart_data = pd.DataFrame(
@@ -72,14 +74,14 @@ chart_data = pd.DataFrame(
 )
 chart1.bar_chart(chart_data)
 chart2.line_chart(chart_data)
-st.markdown("Next, the data will be transformed into a more visual format, such as graphs or tables. The goal is to make it easier for stakeholders to understand the information and see patterns and trends in the data.")
-st.markdown("Once the data is transformed, the analyst will likely carry out exploratory data analysis to identify any outliers, trends, or patterns in the data. This will help to identify any areas of concern or opportunity that need to be addressed.")
+st.markdown("They can help companies make informed decision by identifying patterns and trends in data that can help to improve business operations and increase efficiency or reduce costs.")
+st.markdown("Data analysis can help companies measure the effectiveness of their marketing campaigns , customer engagement strategies and other business initiatives.")
 
 # image
 st.markdown("### Data Analyze")
 img1 , img2 = st.columns(2)
-image_data1 = Image.open('data1.png')
-image_data2 = Image.open('data2.jpg')
+image_data1 = Image.open('images/data1.png')
+image_data2 = Image.open('images/data2.jpg')
 img1.image(image_data1, width=None,caption='Data Analyze')
 img2.image(image_data2, width=None,caption='Data Structure')
 
@@ -98,6 +100,24 @@ video_data1.video(vid)
 video_data2.video(vid1)
 video_data3.video(vid2)
 video_data4.video(vid3)
+
+st.subheader("How this website works?")
+st.markdown("On of the most important thing about this website is it significantly reduce the time and effort required to analyze the dataset. This is huge time saver and allows me to focus on other aspects of my work.")
+st.markdown("This data analysis project involves transforming your Excel sheet and CSV file format into simple and understanding form and also gives a perfect format. The main aim of this project is to convert the data into graphical, tabular form or pie chart form.")
+st.markdown("""
+##### Step 1:- It Import the CSV data from the progress report into the data analysis tool.
+            
+##### Step 2:- Once the data is loaded, than other step is to clean and manipulate the data is to ensure that the data is accurate and consistent or not.
+            
+##### Step 3:- Next, the data will be transformed into a more visual format, such as graphs or tabular form. The goal is to make it easier for stakeholders to understand the information and see patterns and trends in the data.
+            
+##### Step 4:- Once the data is transformed, the analyst will likely carry out exploratory data analysis to identify any outliers, trends, or patterns in the data. This will help to identify any areas of concern or opportunity that need to be addressed. The report may include visualizations, key insights, and recommendations based on the findings of the analysis.
+            
+##### Step 5:- Data visualization helps to tell stories by curating data into format that’s easier to understand. Effective data visualization is a delicate balancing act between form and function.
+
+
+Conclusion:- This data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.
+            """)
 
 with st.sidebar.header('1. Upload your CSV data'):
     uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
