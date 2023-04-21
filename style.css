@@ -6,7 +6,7 @@ body {
     background-position: center center;
     animation: animateBackground 10s linear infinite;
 }
-#MainMenu {
+footer {
      visibility:hidden;
 }
 /* Define the text overlay */
