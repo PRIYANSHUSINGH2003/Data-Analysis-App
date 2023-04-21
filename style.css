@@ -6,6 +6,9 @@ body {
     background-position: center center;
     animation: animateBackground 10s linear infinite;
 }
+#MainMenu {
+     visibility:hidden;
+}
 /* Define the text overlay */
 .text-overlay {
     position: relative;
