@@ -149,7 +149,7 @@ else:
     if st.button('Press to use Example Dataset'):
         st.markdown(f"""<div>
         <h3>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>
-        </div>""")
+        </div>""",unsafe_allow_html=True)
         # Example data
         @st.cache
         def load_Csv():
