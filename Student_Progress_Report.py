@@ -190,5 +190,5 @@ st.sidebar.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-st.markdown(f"""<h2> This app is created by <span style="font-weigth:900; color:rgb(243, 114, 91); font-size: 24px; font-size: 24px;">Priyanshu Singh.</span></h2>""", unsafe_allow_html=True)
+st.markdown(f"""<h2> This app is created by <h3 style="font-weigth:900; color:rgb(243, 114, 91); font-size: 24px; ">Priyanshu Singh.</h3></h2>""", unsafe_allow_html=True)
 st.markdown(f"""<div class="footer">This is a Streamlit app for uploading and displaying CSV data.</div>""", unsafe_allow_html=True)
