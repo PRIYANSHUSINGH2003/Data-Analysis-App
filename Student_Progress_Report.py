@@ -5,8 +5,8 @@ from streamlit_pandas_profiling import st_profile_report
 from PIL import Image
 import numpy as np
 import plotly.figure_factory as ff
-
-
+import plotly.express as px
+# import openpyxl
 
 
 # Set the page title
@@ -125,6 +125,9 @@ st.markdown("""
 with st.sidebar.header('1. Upload your CSV data'):
     uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
 
+with st.sidebar.header('2. Upload your Excel file data'):
+    uploaded_file1 = st.sidebar.file_uploader('Choose a XLSX file', type='xlsx')
+
 #pandas profiling report data
 if uploaded_file is not None:
     progress_bar = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
@@ -144,13 +147,11 @@ if uploaded_file is not None:
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
-        # Example dara
+        st.markdown('This data collected by Raunak Saluja')
+        # Example data
         @st.cache
         def load_Csv():
-            a = pd.DataFrame(
-                np.random.randn(100,8),
-                columns=['a','b','c','d','e','f','g','h']
-            )
+            a = pd.read_csv("Analyzing.csv")
             return a
         df = load_Csv()
         pr = ProfileReport(df, explorative=True)
@@ -160,6 +161,23 @@ else:
         st.write('-----')
         st.header("Normal Data.....!")
         st_profile_report(pr)
+
+if uploaded_file1:
+    st.markdown('----')
+    progress_bar1 = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
+    @st.cache
+    def load_xlsx_data():
+        xlsx_data = pd.read_excel(uploaded_file1, engine='openpyxl')
+        return xlsx_data
+    df1 = load_xlsx_data()
+    progress_bar1.empty()
+    pr1 = ProfileReport(df, explorative = True)
+    st.header("View Your Data.....")
+    st.code("loading.....!")
+    st.write(df1)
+    st.write('---')
+    st.header("Progress Report Showing Now....!")
+    st_profile_report(pr1)
 
 programmer_name = "Priyanshu Singh"
 
@@ -173,8 +191,3 @@ st.sidebar.markdown(f"""
 
 
 st.markdown('<div class="footer">This is a Streamlit app for uploading and displaying CSV data.</div>', unsafe_allow_html=True)
-# # print(df)
-
-# # Generatew a report
-# profile = ProfileReport(df)
-# profile.to_file(output_file = "students - Sheet1.html")
