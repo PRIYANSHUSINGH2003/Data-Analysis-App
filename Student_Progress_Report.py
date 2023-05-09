@@ -147,7 +147,7 @@ if uploaded_file is not None:
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
-        st.markdown(f"""This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span>""")
+        st.markdown(f"""<h3>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>""")
         # Example data
         @st.cache
         def load_Csv():
