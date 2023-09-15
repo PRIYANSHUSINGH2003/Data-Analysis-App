@@ -126,7 +126,7 @@ with st.sidebar.header('2. Upload your Excel file data'):
 #pandas profiling report data
 if uploaded_file is not None:
     progress_bar = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
-    @st.cache
+    @st.cache_data
     def load_csv_data():
         csv_data = pd.read_csv(uploaded_file)
         return csv_data
@@ -145,7 +145,7 @@ else:
         st.markdown(f"""
         <h4>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>""",unsafe_allow_html=True)
         # Example data
-        @st.cache
+        @st.cache_data
         def load_Csv():
             a = pd.read_csv("Analyzing.csv")
             return a
@@ -161,7 +161,7 @@ else:
 if uploaded_file1:
     st.markdown('----')
     progress_bar1 = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
-    @st.cache
+    @st.cache_data
     def load_xlsx_data():
         xlsx_data = pd.read_excel(uploaded_file1, engine='openpyxl')
         return xlsx_data
