@@ -9,7 +9,7 @@ import plotly.express as px
 import openpyxl
 
 import warnings
-import matplotlib  # Import matplotlib here
+import matplotlib.pyplot as plt  # Import matplotlib's pyplot module
 
 # Filter out Matplotlib deprecation warnings
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
