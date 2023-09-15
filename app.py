@@ -135,7 +135,7 @@ def load_csv_data(uploaded_file):
 def load_Csv():
     try:
         a = pd.read_csv("Analyzing.csv")
-            return a
+        return a
     except Exception as e:
         st.error(f"Error loading CSV file: {str(e)}")
         return None
