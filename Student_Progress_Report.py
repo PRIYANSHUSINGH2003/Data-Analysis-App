@@ -1,12 +1,12 @@
 import pandas as pd
 import streamlit as st
-from pandas_profiling import ProfileReport
+from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 from PIL import Image
 import numpy as np
 import plotly.figure_factory as ff
 import plotly.express as px
-# import openpyxl
+import openpyxl
 
 
 # Set the page title
@@ -14,7 +14,9 @@ logo = Image.open("images/Logo.png")
 st.set_page_config(page_title='~AnalysisMaster',page_icon=logo,layout="wide")
 # Add a title
 st.title("My Dashboard")
-
+with open('style.css') as f:
+    st.sidebar.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+st.sidebar.image(logo)
 # Add a sidebar with options
 option = st.sidebar.selectbox(
     'Which option do you like best?',
@@ -22,20 +24,23 @@ option = st.sidebar.selectbox(
 )
 
 # Add a slider
-x = st.slider('Select a value')
+x = st.slider('Select a value',min_value=6)
 
 # Add a chart
-st.line_chart(np.random.randn(10, x))
+line_chart_data = np.random.randn(10, x)
+st.line_chart(line_chart_data)
+line_chart_columns = [f'Column {i+1}' for i in range(x)]
+df_line_chart = pd.DataFrame(line_chart_data, columns=line_chart_columns)
+st.write("Total No. of Participants")
 
 # Add a table
 cards1, cards2= st.columns(2)
 
-df = pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-})
-st.write(df)
+cards1.write(df_line_chart)
+pie_char_columns =[f'Column {i+1}' for i in range(x)]
+pie_chart = px.pie(df_line_chart, values=df_line_chart.iloc[0],names=line_chart_columns,width=350, height=350)
 
+cards2.plotly_chart(pie_chart)
 
 
 x1 = np.random.randn(200) - 2
@@ -47,14 +52,9 @@ group_labels = ['Group 1', 'Group 2', 'Group 3']
 fig = ff.create_distplot(
         hist_data, group_labels, bin_size=[.1, .25, .5])
 
-# Plot!
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True,width=350, height=350)
 
-
-# /////////////////////////////
-
-
-
+# add custom CSS
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
 
@@ -92,10 +92,10 @@ st.markdown("Overall, this data analysis project is a critical step in transform
 
 #  video
 video_data1 , video_data2 , video_data3 , video_data4 = st.columns(4)
-vid = open('dashboard-data.mp4','rb').read()
-vid1= open('network.mp4','rb').read()
-vid2= open('evaluation.mp4','rb').read()
-vid3= open('data.mp4','rb').read()
+vid = open('video/dashboard-data.mp4','rb').read()
+vid1= open('video/network.mp4','rb').read()
+vid2= open('video/evaluation.mp4','rb').read()
+vid3= open('video/data.mp4','rb').read()
 
 video_data1.video(vid)
 video_data2.video(vid1)
@@ -105,20 +105,15 @@ video_data4.video(vid3)
 st.subheader("How this website works?")
 st.markdown("On of the most important thing about this website is it significantly reduce the time and effort required to analyze the dataset. This is huge time saver and allows me to focus on other aspects of my work.")
 st.markdown("This data analysis project involves transforming your Excel sheet and CSV file format into simple and understanding form and also gives a perfect format. The main aim of this project is to convert the data into graphical, tabular form or pie chart form.")
+steps = [
+    "Step 1:- It Import the CSV data from the progress report into the data analysis tool.",
+    "Step 2:- Once the data is loaded, than other step is to clean and manipulate the data is to ensure that the data is accurate and consistent or not.",
+    "Step 3:- Next, the data will be transformed into a more visual format, such as graphs or tabular form. The goal is to make it easier for stakeholders to understand the information and see patterns and trends in the data.",
+    "Step 4:- Once the data is transformed, the analyst will likely carry out exploratory data analysis to identify any outliers, trends, or patterns in the data. This will help to identify any areas of concern or opportunity that need to be addressed. The report may include visualizations, key insights, and recommendations based on the findings of the analysis." ,
+    "Step 5:- Data visualization helps to tell stories by curating data into format that’s easier to understand. Effective data visualization is a delicate balancing act between form and function."
+]
+st.markdown("<ul>" + "".join([f"<li class='li-steps'>{step}</li>" for step in steps]) + "</ul>", unsafe_allow_html=True)
 st.markdown("""
-
-
-##### Step 1:- It Import the CSV data from the progress report into the data analysis tool.
-            
-##### Step 2:- Once the data is loaded, than other step is to clean and manipulate the data is to ensure that the data is accurate and consistent or not.
-            
-##### Step 3:- Next, the data will be transformed into a more visual format, such as graphs or tabular form. The goal is to make it easier for stakeholders to understand the information and see patterns and trends in the data.
-            
-##### Step 4:- Once the data is transformed, the analyst will likely carry out exploratory data analysis to identify any outliers, trends, or patterns in the data. This will help to identify any areas of concern or opportunity that need to be addressed. The report may include visualizations, key insights, and recommendations based on the findings of the analysis.
-            
-##### Step 5:- Data visualization helps to tell stories by curating data into format that’s easier to understand. Effective data visualization is a delicate balancing act between form and function.
-
-
     #### Conclusion:- This data analysis project is a critical step in transforming raw data into actionable insights that can help stakeholders make informed decisions and improve outcomes.
             """)
 
@@ -192,3 +187,12 @@ st.sidebar.markdown(f"""
 
 st.markdown(f"""<h2> This app is created by <span style="font-weigth:900; color:rgb(243, 114, 91); font-size: 34px; ">Priyanshu Singh.</span></h2>""", unsafe_allow_html=True)
 st.markdown(f"""<div class="footer">This is a Streamlit app for uploading and displaying CSV data.</div>""", unsafe_allow_html=True)
+
+hide_st_style = """
+    <style>
+        #MainMenu {visiblity: hidden;}
+        footer {visiblity: hidden;}
+        header {visiblity: hidden;}
+    </style>
+    """
+st.markdown(hide_st_style, unsafe_allow_html=True)
