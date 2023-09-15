@@ -167,7 +167,7 @@ if uploaded_file1:
         return xlsx_data
     df1 = load_xlsx_data()
     progress_bar1.empty()
-    pr1 = ProfileReport(df, explorative = True)
+    pr1 = ProfileReport(df1, explorative = True)
     st.header("View Your Data.....")
     st.code("loading.....!")
     st.write(df1)
