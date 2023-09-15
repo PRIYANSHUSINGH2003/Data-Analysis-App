@@ -6,9 +6,11 @@ body {
     background-position: center center;
     animation: animateBackground 10s linear infinite;
 }
+
 footer {
-     visibility:hidden;
+    visibility: hidden;
 }
+
 /* Define the text overlay */
 .text-overlay {
     position: relative;
@@ -20,23 +22,55 @@ footer {
     text-shadow: 2px 2px #000;
     animation: animateText 10s linear infinite;
 }
+
 /* Animate the text overlay */
 @keyframes animateText {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-40px); }
-    100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-30px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
+
 /* Animate the body background */
 @keyframes animateBackground {
-    0% { background-position: center center; }
-    50% { background-position: center 30%; }
-    100% { background-position: center center; }
+    0% {
+        background-position: center center;
+    }
+
+    50% {
+        background-position: center 30%;
+    }
+
+    100% {
+        background-position: center center;
+    }
 }
-.etr89bj1 img{
+
+.etr89bj1 img {
     background: #ababab;
-    border: 1rem solid #303030; 
+    border: 1rem solid #303030;
     border-radius: 21% 7% 20% / 50% 40% 40%;
 }
+
+.css-1kyxreq .e115fcil1 img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.css-1kyxreq .e115fcil1 img:hover {
+    transform: scale(1.1);
+    border: 2px solid #f3725b;
+}
+
 .progress-bar {
     position: fixed;
     bottom: 0;
@@ -45,6 +79,24 @@ footer {
     height: 5px;
     background-color: #e6e6e6;
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.li-steps {
+    padding: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s;
+}
+
+.li-steps:hover {
+    color: #000;
+    background-color: #f0f0f0;
+}
+
 .progress-bar-inner {
     position: absolute;
     left: 0;
@@ -52,6 +104,7 @@ footer {
     height: 100%;
     background-color: #003366;
 }
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -65,8 +118,12 @@ footer {
     font-size: 16px;
     font-weight: bold;
     color: #003366;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
-
+@media (max-width: 768px) {
+    .li-steps {
+        font-size: 16px;
+    }
+}
