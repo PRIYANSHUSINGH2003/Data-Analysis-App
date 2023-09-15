@@ -138,7 +138,10 @@ if uploaded_file is not None:
     st.write(df)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    st_profile_report(pr)
+    try:
+        st_profile_report(pr)  # Try generating the report
+    except Exception as e:
+        st.error(f"Error generating profile report: {str(e)}")
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
@@ -156,7 +159,10 @@ else:
         st.write(df)
         st.write('-----')
         st.header("Normal Data.....!")
-        st_profile_report(pr)
+        try:
+            st_profile_report(pr)  # Try generating the report
+        except Exception as e:
+            st.error(f"Error generating profile report: {str(e)}")
 
 if uploaded_file1:
     st.markdown('----')
@@ -173,7 +179,10 @@ if uploaded_file1:
     st.write(df1)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    st_profile_report(pr1)
+    try:
+        st_profile_report(pr1)  # Try generating the report
+    except Exception as e:
+        st.error(f"Error generating profile report: {str(e)}")
 
 programmer_name = "Priyanshu Singh"
 
