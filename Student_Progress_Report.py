@@ -8,12 +8,6 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import openpyxl
 
-import warnings
-import matplotlib.pyplot as plt  # Import matplotlib's pyplot module
-
-# Filter out Matplotlib deprecation warnings
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-
 # Set the page title
 logo = Image.open("images/Logo.png")
 st.set_page_config(page_title='~AnalysisMaster',page_icon=logo,layout="wide")
