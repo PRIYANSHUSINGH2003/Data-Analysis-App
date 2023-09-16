@@ -123,34 +123,13 @@ with st.sidebar.header('1. Upload your CSV data'):
 with st.sidebar.header('2. Upload your Excel file data'):
     uploaded_file1 = st.sidebar.file_uploader('Choose a XLSX file', type='xlsx')
 
-# Load CSV Data
-def load_csv_data(uploaded_file):
-    try:
-        csv_data = pd.read_csv(uploaded_file)
-        return csv_data
-    except Exception as e:
-        st.error(f"Error loading CSV file: {str(e)}")
-        return None
-        
-def load_Csv():
-    try:
-        a = pd.read_csv("Analyzing.csv")
-        return a
-    except Exception as e:
-        st.error(f"Error loading CSV file: {str(e)}")
-        return None
-        
-# Load XLSX Data
-def load_xlsx_data(uploaded_file1):
-    try:
-        xlsx_data = pd.read_excel(uploaded_file1, engine='openpyxl')
-        return xlsx_data
-    except Exception as e:
-        st.error(f"Error loading XLSX file: {str(e)}")
-        return None
 #pandas profiling report data
 if uploaded_file is not None:
     progress_bar = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
+    @st.cache
+    def load_csv_data():
+        csv_data = pd.read_csv(uploaded_file)
+        return csv_data
     df = load_csv_data()
     progress_bar.empty()
     pr = ProfileReport(df, explorative = True)
@@ -159,16 +138,17 @@ if uploaded_file is not None:
     st.write(df)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    try:
-        st_profile_report(pr)  # Try generating the report
-    except Exception as e:
-        st.error(f"Error generating profile report: {str(e)}")
+    st_profile_report(pr)
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
         st.markdown(f"""
         <h4>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>""",unsafe_allow_html=True)
         # Example data
+        @st.cache
+        def load_Csv():
+            a = pd.read_csv("Analyzing.csv")
+            return a
         df = load_Csv()
         pr = ProfileReport(df, explorative=True)
         st.header("Input DataFrame.....!")
@@ -176,14 +156,15 @@ else:
         st.write(df)
         st.write('-----')
         st.header("Normal Data.....!")
-        try:
-            st_profile_report(pr)  # Try generating the report
-        except Exception as e:
-            st.error(f"Error generating profile report: {str(e)}")
+        st_profile_report(pr)
 
 if uploaded_file1:
     st.markdown('----')
     progress_bar1 = st.markdown('<div class="progress-bar"><div class="progress-bar-inner"></div></div>', unsafe_allow_html=True)
+    @st.cache
+    def load_xlsx_data():
+        xlsx_data = pd.read_excel(uploaded_file1, engine='openpyxl')
+        return xlsx_data
     df1 = load_xlsx_data()
     progress_bar1.empty()
     pr1 = ProfileReport(df1, explorative = True)
@@ -192,10 +173,7 @@ if uploaded_file1:
     st.write(df1)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    try:
-        st_profile_report(pr1)  # Try generating the report
-    except Exception as e:
-        st.error(f"Error generating profile report: {str(e)}")
+    st_profile_report(pr1)
 
 programmer_name = "Priyanshu Singh"
 
