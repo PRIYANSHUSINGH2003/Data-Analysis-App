@@ -5,4 +5,4 @@ ydata-profiling
 streamlit-pandas-profiling
 plotly
 openpyxl
-matplotlib
+matplotlib==3.4.3
