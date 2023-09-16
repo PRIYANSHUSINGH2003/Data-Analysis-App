@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 from ydata_profiling import ProfileReport
-from streamlit_pandas_profiling import st_profile_report_data
+from streamlit_pandas_profiling import st_profile_report
 from PIL import Image
 import numpy as np
 import plotly.figure_factory as ff
@@ -138,7 +138,7 @@ if uploaded_file is not None:
     st.write(df)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    st_profile_report_data(pr)
+    st_profile_report(pr)
 else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
@@ -156,7 +156,7 @@ else:
         st.write(df)
         st.write('-----')
         st.header("Normal Data.....!")
-        st_profile_report_data(pr)
+        st_profile_report(pr)
 
 if uploaded_file1:
     st.markdown('----')
@@ -173,7 +173,7 @@ if uploaded_file1:
     st.write(df1)
     st.write('---')
     st.header("Progress Report Showing Now....!")
-    st_profile_report_data(pr1)
+    st_profile_report(pr1)
 
 programmer_name = "Priyanshu Singh"
 
