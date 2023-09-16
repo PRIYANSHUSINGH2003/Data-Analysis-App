@@ -81,10 +81,10 @@ st.markdown("Data analysis can help companies measure the effectiveness of their
 # image
 st.markdown("### Data Analyze")
 img1 , img2 = st.columns(2)
-image_data1 = Image.open('images/data1.png')
-image_data2 = Image.open('images/data2.jpg')
-img1.image(image_data1, width=None,caption='Data Analyze')
-img2.image(image_data2, width=None,caption='Data Structure')
+image_data1 = open('images/data.gif','rb').read()
+image_data2 = open('images/internet.gif','rb').read()
+img1.image(image_data1, width=400,caption='Data Analyze')
+img2.image(image_data2, width=400,caption='Data Structure')
 
 # st.image(image_url, )
 st.markdown("Finally, the data analysis project will culminate in the creation of a report or dashboard that presents the findings of the analysis in an easily understandable format. The report may include visualizations, key insights, and recommendations based on the findings of the analysis.")
