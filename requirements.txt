@@ -4,4 +4,4 @@ numpy==1.21.2
 ydata-profiling==2.12.0
 streamlit-pandas-profiling==0.4.1
 plotly==5.3.1
-openpyxl==3.0.
+openpyxl==3.0.9
