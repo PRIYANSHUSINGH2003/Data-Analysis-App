@@ -5,3 +5,4 @@ ydata-profiling
 streamlit-pandas-profiling
 plotly
 openpyxl
+matplotlib
