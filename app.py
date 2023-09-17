@@ -28,7 +28,7 @@ x = st.slider('Select a value',min_value=6)
 
 # Add a chart
 line_chart_data = np.random.randn(10, x)
-st.line_chart(line_chart_data)
+st.line_chart(line_chart_data, use_container_width=True,width=350, height=350)
 line_chart_columns = [f'Column {i+1}' for i in range(x)]
 df_line_chart = pd.DataFrame(line_chart_data, columns=line_chart_columns)
 st.write("Total No. of Participants")
