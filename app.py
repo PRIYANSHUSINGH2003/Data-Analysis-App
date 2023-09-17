@@ -28,7 +28,7 @@ x = st.slider('Select a value',min_value=6)
 
 # Add a chart
 line_chart_data = np.random.randn(10, x)
-st.line_chart(line_chart_data)
+st.line_chart(line_chart_data, use_container_width=True,width=300, height=350)
 line_chart_columns = [f'Column {i+1}' for i in range(x)]
 df_line_chart = pd.DataFrame(line_chart_data, columns=line_chart_columns)
 st.write("Total No. of Participants")
@@ -40,7 +40,7 @@ cards1.write(df_line_chart)
 pie_char_columns =[f'Column {i+1}' for i in range(x)]
 pie_chart = px.pie(df_line_chart, values=df_line_chart.iloc[0],names=line_chart_columns,width=350, height=350)
 
-cards2.plotly_chart(pie_chart)
+cards2.plotly_chart(pie_chart, use_container_width=True,width=300, height=350)
 
 
 x1 = np.random.randn(200) - 2
@@ -52,7 +52,7 @@ group_labels = ['Group 1', 'Group 2', 'Group 3']
 fig = ff.create_distplot(
         hist_data, group_labels, bin_size=[.1, .25, .5])
 
-st.plotly_chart(fig)
+st.plotly_chart(fig,use_container_width=True,width=350, height=350)
 
 # add custom CSS
 with open('style.css') as f:
