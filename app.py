@@ -28,7 +28,7 @@ x = st.slider('Select a value',min_value=6)
 
 # Add a chart
 line_chart_data = np.random.randn(10, x)
-st.line_chart(line_chart_data, use_container_width=True,width=350, height=350)
+st.line_chart(line_chart_data)
 line_chart_columns = [f'Column {i+1}' for i in range(x)]
 df_line_chart = pd.DataFrame(line_chart_data, columns=line_chart_columns)
 st.write("Total No. of Participants")
@@ -52,7 +52,7 @@ group_labels = ['Group 1', 'Group 2', 'Group 3']
 fig = ff.create_distplot(
         hist_data, group_labels, bin_size=[.1, .25, .5])
 
-st.plotly_chart(fig, use_container_width=True,width=350, height=350)
+st.plotly_chart(fig)
 
 # add custom CSS
 with open('style.css') as f:
