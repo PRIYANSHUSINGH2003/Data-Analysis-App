@@ -143,7 +143,7 @@ else:
     st.info('Awaiting for CSV file to be uploaded.')
     if st.button('Press to use Example Dataset'):
         st.markdown(f"""
-        <h4>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>""",unsafe_allow_html=True)
+        <h4>This data base on generic of food</h4>""",unsafe_allow_html=True)
         # Example data
         @st.cache_data
         def load_Csv():
