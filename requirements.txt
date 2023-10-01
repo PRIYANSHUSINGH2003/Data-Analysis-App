@@ -5,4 +5,7 @@ ydata-profiling
 streamlit-pandas-profiling
 plotly
 openpyxl
+yfinance
+pillow
 matplotlib==3.4.3
+
