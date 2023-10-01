@@ -7,5 +7,6 @@ plotly
 openpyxl
 yfinance
 pillow
+option_menu
 matplotlib==3.4.3
 
