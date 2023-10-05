@@ -155,7 +155,7 @@ def home_page():
         st.info('Awaiting for CSV file to be uploaded.')
         if st.button('Press to use Example Dataset'):
             st.markdown(f"""
-            <h4 style='font-size: 24px; font-weight: bold; text-shadow: 2px 2px 5px yellow;'>Generic Food Database</h3>""",unsafe_allow_html=True)
+            <h4 style='font-size: 28px; font-weight: bold; text-shadow: 2px 2px 5px yellow;'>Generic Food Database</h3>""",unsafe_allow_html=True)
             # Example data
             @st.cache
             def load_Csv():
