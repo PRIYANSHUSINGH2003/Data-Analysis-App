@@ -8,5 +8,5 @@ openpyxl
 yfinance
 pillow
 streamlit-option-menu
-matplotlib==3.4.3
+matplotlib
 
