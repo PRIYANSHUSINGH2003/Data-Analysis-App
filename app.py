@@ -210,7 +210,7 @@ def home_page():
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
 def Stock_Performance():
-st.write("Total No. of Participants")
+st.header('Data Progress Report')
 
 
 def contact_select():
