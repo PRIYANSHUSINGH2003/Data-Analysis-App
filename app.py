@@ -210,49 +210,92 @@ def home_page():
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
 def Stock_Performance():
+    import pandas as pd
+    import base64
     import yfinance as yf
-    import datetime
-
-    st.title("Portfolio Analysis and Stock Performance")
-
-    # Sidebar for selecting stocks and portfolio allocation
-    st.sidebar.subheader("Stock Performance")
-    selected_tickers = st.sidebar.multiselect("Select Stocks", ['AAPL', 'MSFT', 'GOOGL', 'TSLA'], default=['AAPL', 'MSFT'])
-    allocation_weights = {}
-
-    for ticker in selected_tickers:
-        allocation_weight = st.sidebar.number_input(f"Allocation Weight for {ticker}", min_value=0.0, max_value=100.0, value=0.0, step=1.0)
-        allocation_weights[ticker] = allocation_weight
-
-    if sum(allocation_weights.values()) != 100:
-        st.sidebar.error("Allocation weights must add up to 100%.")
-        return
-
-    # Create an empty DataFrame with the date index
-    portfolio_df = pd.DataFrame(index=pd.date_range(start="2020-01-01", end=datetime.date.today()))
-
-    # Retrieve historical data for selected stocks and calculate portfolio value
-    for ticker, weight in allocation_weights.items():
-        data = yf.download(ticker, start="2020-01-01", end=datetime.date.today())
-        data[f'{ticker} Portfolio Value'] = (data['Adj Close'] / data['Adj Close'].iloc[0]) * (weight / 100.0)
-
-        # Join the stock data to the portfolio DataFrame
-        portfolio_df = portfolio_df.join(data[f'{ticker} Portfolio Value'])
-
-    # Calculate and display total portfolio value
-    portfolio_df['Total Portfolio Value'] = portfolio_df.sum(axis=1)
-
-    # Display portfolio performance chart
-    st.subheader("Portfolio Performance")
-    st.line_chart(portfolio_df['Total Portfolio Value'])
-
-    @st.cache(allow_output_mutation=True)
-    def download_dataset():
-        """Loads once then cached for subsequent runs"""
-        df = pd.read_csv(
-            "https://www.cureffi.org/wp-content/uploads/2013/10/drugs.txt", sep="\t"
-        ).dropna()
+    import matplotlib.pyplot as plt
+    
+    st.sidebar.header('User Input Features')
+    # Function to load S&P 500 data
+    @st.cache_data
+    def load_data():
+        url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+        html = pd.read_html(url, header=0)
+        df = html[0]
         return df
+    
+    # Load S&P 500 data
+    df = load_data()
+    sector = df.groupby('GICS Sector')
+    
+    # Sidebar - Sector selection
+    sorted_sector_unique = sorted(df['GICS Sector'].unique())
+    selected_sector = st.sidebar.multiselect('Sector', sorted_sector_unique, sorted_sector_unique)
+    
+    # Filtering data
+    df_selected_sector = df[df['GICS Sector'].isin(selected_sector)]
+    
+    # Display selected companies
+    st.header('Display Companies in Selected Sector')
+    st.write('Data Dimension: ' + str(df_selected_sector.shape[0]) + ' rows and ' + str(df_selected_sector.shape[1]) + ' columns.')
+    st.dataframe(df_selected_sector)
+    
+    # Download S&P 500 data as CSV
+    def filedownload(df):
+        csv = df.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+        href = f'<a href="data:file/csv;base64,{b64}" download="SP500.csv">Download CSV File</a>'
+        return href
+    
+    st.markdown(filedownload(df_selected_sector), unsafe_allow_html=True)
+    
+    # Download historical stock data for selected companies
+    num_company = st.sidebar.slider('Number of Companies', 1, 5)
+    
+    if st.button('Show Plots'):
+        st.header('Stock Closing Price')
+        data = yf.download(
+            tickers=list(df_selected_sector['Symbol'][:num_company]),
+            period="ytd",
+            interval="1d",
+            group_by='ticker',
+            auto_adjust=True,
+            prepost=True,
+            threads=True,
+            proxy=None
+        )
+
+        # Create an empty DataFrame for the portfolio performance
+        portfolio_performance = pd.DataFrame(index=data.index)
+
+        # Plot Closing Price of Selected Companies
+        def price_plot(data, symbol):
+            df = pd.DataFrame(data[symbol]['Close'])
+            df['Date'] = df.index
+            plt.fill_between(df['Date'], df['Close'], color='skyblue', alpha=0.3)
+            plt.plot(df['Date'], df['Close'], color='skyblue', alpha=0.8)
+            plt.xticks(rotation=90)
+            plt.title(symbol, fontweight='bold')
+            plt.xlabel('Date', fontweight='bold')
+            plt.ylabel('Closing Price', fontweight='bold')
+            return plt
+
+        for i in range(num_company):
+            symbol = df_selected_sector.iloc[i]['Symbol']
+            st.write(f"### {symbol}")
+
+            try:
+                fig = price_plot(data, symbol)
+                st.pyplot(fig)
+
+                # Add the closing price data to the portfolio performance DataFrame
+                portfolio_performance[symbol] = data[symbol]['Close']
+
+            except KeyError:
+                st.warning(f"Stock data for '{symbol}' not found.")
+        # Plot Portfolio Performance
+        st.subheader("Portfolio Performance")
+        st.line_chart(portfolio_performance)
 
 def contact_select():
     st.title("Contact Information")
