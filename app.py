@@ -297,6 +297,7 @@ def Stock_Performance():
         st.subheader("Portfolio Performance")
         st.line_chart(portfolio_performance)
 
+
 def contact_select():
     st.title("Contact Information")
     st.write("You can contact us via the following methods:")
