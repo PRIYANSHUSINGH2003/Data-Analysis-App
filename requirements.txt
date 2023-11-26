@@ -4,9 +4,11 @@ numpy
 ydata-profiling
 streamlit-pandas-profiling
 plotly
-openpyxl
 yfinance
 pillow
 streamlit-option-menu
 matplotlib==3.7.3
+st-speckmol
+Pillow 
+ipython_genutils
 
