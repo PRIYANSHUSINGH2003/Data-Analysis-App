@@ -7,12 +7,11 @@ from PIL import Image
 import numpy as np
 import plotly.figure_factory as ff
 import plotly.express as px
-import openpyxl
 
 def main_menu():
     selected = option_menu(
         menu_title="Main Menu",
-        options=["Home", "Stock Analysis", "Contact"],
+        options=["Home", "Stock Analysis", "Protein Structure", "Chatbot" ,"Contact"],
     )
     return selected
 
@@ -155,7 +154,7 @@ def home_page():
         st.info('Awaiting for CSV file to be uploaded.')
         if st.button('Press to use Example Dataset'):
             st.markdown(f"""
-            <h4 style='font-size: 28px; font-weight: bold; text-shadow: 2px 2px 5px yellow;'>Generic Food Database</h3>""",unsafe_allow_html=True)
+            <h4>This data is collected by <span style='color:red; font-weight:600;'>Raunak Saluja</span></h3>""",unsafe_allow_html=True)
             # Example data
             @st.cache
             def load_Csv():
@@ -297,6 +296,112 @@ def Stock_Performance():
         st.subheader("Portfolio Performance")
         st.line_chart(portfolio_performance)
 
+def protein_structure_prediction():
+    from st_speckmol import spec_plot
+    import glob
+
+    st.markdown('''# st-speckmol :package:
+    _A Streamlit **Component** for creating Speck molecular structures within Streamlit Web app._
+    ''')
+
+    x_files = glob.glob("DNA_Structure/*.xyz")
+    with st.sidebar:
+        ex_xyz = st.selectbox('Select a molecule', x_files)
+        f = open(ex_xyz, "r")
+        ex_xyz = f.read()
+        
+    res = spec_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True)
+
+    with st.sidebar.expander("Parameters", expanded=True):
+        outl = st.checkbox('Outline', value=True)
+        bond = st.checkbox('Bond', value=True)
+        bond_scale = st.slider('BondScale', min_value=0.0, max_value=1.0, value=0.8)
+        brightness = st.slider('Brightness', min_value=0.0, max_value=1.0, value=0.4)
+        relativeAtomScale = st.slider('RelativeAtomScale', min_value=0.0, max_value=1.0, value=0.64)
+        bondShade = st.slider('BondShade', min_value=0.0, max_value=1.0, value=0.5)
+
+    _PARAMETERS = {
+        'outline': outl, 'bondScale': bond_scale,
+        'bonds': bond, 'bondShade': bondShade,
+        'brightness': brightness, 'relativeAtomScale': relativeAtomScale,
+    }
+    res = spec_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True, _PARAMETER=_PARAMETERS)
+
+    st.markdown('''# st-speckmol :package:
+    _A Streamlit **Component** for creating Speck molecular structures within Streamlit Web app._
+    ''')
+
+    st.sidebar.header("Add your own xyz coordinates below. :art:")
+    example_xyz = '''5
+    methane molecule (in ångströms)
+    C        0.000000        0.000000        0.000000
+    H        0.000000        0.000000        1.089000
+    H        1.026719        0.000000       -0.363000
+    H       -0.513360       -0.889165       -0.363000
+    H       -0.513360        0.889165       -0.363000
+    '''
+    _xyz = st.sidebar.text_area(
+        label="Paste your coordinates ⬇️",
+        value=example_xyz,
+        height=200
+    )
+
+    st.code(_xyz.splitlines()[1])
+    res = spec_plot(_xyz)
+
+
+
+def chatbot_page():
+    import random
+    import time
+
+    st.title("Chatbot")
+
+    # Initialize chat history
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    # Display chat messages from history on app rerun
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    # Accept user input
+    prompt = st.chat_input("What is up?")
+
+    # Display user message in chat message container
+    if prompt:
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+
+        # Response logic based on input prompt
+        if prompt and "hello" in prompt.lower():
+            assistant_response = random.choice(["Hi there!", "Hello!", "Hey!"])
+        elif prompt and "how are you" in prompt.lower():
+            assistant_response = random.choice(["I'm good, thanks!", "Doing well, how about you?", "Not bad!"])
+        elif prompt and "bye" in prompt.lower():
+            assistant_response = random.choice(["Goodbye!", "See you later!", "Bye!"])
+        else:
+            assistant_response = random.choice(["I'm not sure how to respond to that.", "Could you please provide more details?", "I don't understand."])
+
+        # Simulate stream of response with milliseconds delay
+        for chunk in assistant_response.split():
+            full_response += chunk + " "
+            time.sleep(0.05)
+            # Add a blinking cursor to simulate typing
+            message_placeholder.markdown(full_response + "▌")
+        message_placeholder.markdown(full_response)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+
 
 def contact_select():
     st.title("Contact Information")
@@ -318,6 +423,10 @@ def main():
         home_page()
     elif selected == "Stock Analysis":
         Stock_Performance();
+    elif selected == "Protein Structure":
+        protein_structure_prediction();
+    elif selected == "Chatbot":
+        chatbot_page()
     elif selected == "Contact":
         contact_select();
 
