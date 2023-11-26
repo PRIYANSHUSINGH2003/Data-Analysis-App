@@ -9,6 +9,5 @@ pillow
 streamlit-option-menu
 matplotlib==3.7.3
 st-speckmol==0.0.6
-Pillow 
 ipython_genutils
 
