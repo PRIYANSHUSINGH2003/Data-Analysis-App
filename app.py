@@ -663,7 +663,7 @@ def main():
     global logo
     logo = Image.open("images/Logo.png")
     st.set_page_config(page_title='~AnalysisMaster', page_icon=logo, layout="wide")
-    st.show()
+    st.snow()
     selected = main_menu()
 
     if selected == "Home":
