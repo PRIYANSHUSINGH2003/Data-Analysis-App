@@ -7,11 +7,13 @@ from PIL import Image
 import numpy as np
 import plotly.figure_factory as ff
 import plotly.express as px
+import pickle5 as pickle
+import plotly.graph_objects as go
 
 def main_menu():
     selected = option_menu(
         menu_title="Main Menu",
-        options=["Home", "Stock Analysis", "Protein Structure", "Chatbot" ,"Contact"],
+        options=["Home", "Stock Analysis", "Cancer Predict","Protein Structure", "Cryptocurrency Price","Chatbot" ,"Contact"],
     )
     return selected
 
@@ -296,8 +298,180 @@ def Stock_Performance():
         st.subheader("Portfolio Performance")
         st.line_chart(portfolio_performance)
 
+def Cancer_Predict():
+    with open("assets/style.css") as f:
+        st.markdown("<style>{}</style>".format(f.read()), unsafe_allow_html=True)
+        input_data = add_sidebar()
+    with st.container():
+        st.title("Breast Cancer Predictor")
+        st.write("Please connect this app to your cytology lab to help diagnose breast cancer form your tissue sample. This app predicts using a machine learning model whether a breast mass is benign or malignant based on the measurements it receives from your cytosis lab. You can also update the measurements by hand using the sliders in the sidebar. ")
+    col1, col2 = st.columns([4,1])
+    with col1:
+        radar_chart = get_radar_chart(input_data)
+        st.plotly_chart(radar_chart)
+    with col2:
+        add_predictions(input_data)
+
+def get_clean_data():
+    data = pd.read_csv("data/data.csv")
+    
+    data = data.drop(['Unnamed: 32', 'id'], axis=1)
+    
+    data['diagnosis'] = data['diagnosis'].map({ 'M': 1, 'B': 0 })
+    
+    return data
+
+
+def add_sidebar():
+    st.sidebar.header("Cell Nuclei Measurements")
+
+    data = get_clean_data()  
+    slider_labels = [
+        ("Radius (mean)", "radius_mean"),
+        ("Texture (mean)", "texture_mean"),
+        ("Perimeter (mean)", "perimeter_mean"),
+        ("Area (mean)", "area_mean"),
+        ("Smoothness (mean)", "smoothness_mean"),
+        ("Compactness (mean)", "compactness_mean"),
+        ("Concavity (mean)", "concavity_mean"),
+        ("Concave points (mean)", "concave points_mean"),
+        ("Symmetry (mean)", "symmetry_mean"),
+        ("Fractal dimension (mean)", "fractal_dimension_mean"),
+        ("Radius (se)", "radius_se"),
+        ("Texture (se)", "texture_se"),
+        ("Perimeter (se)", "perimeter_se"),
+        ("Area (se)", "area_se"),
+        ("Smoothness (se)", "smoothness_se"),
+        ("Compactness (se)", "compactness_se"),
+        ("Concavity (se)", "concavity_se"),
+        ("Concave points (se)", "concave points_se"),
+        ("Symmetry (se)", "symmetry_se"),
+        ("Fractal dimension (se)", "fractal_dimension_se"),
+        ("Radius (worst)", "radius_worst"),
+        ("Texture (worst)", "texture_worst"),
+        ("Perimeter (worst)", "perimeter_worst"),
+        ("Area (worst)", "area_worst"),
+        ("Smoothness (worst)", "smoothness_worst"),
+        ("Compactness (worst)", "compactness_worst"),
+        ("Concavity (worst)", "concavity_worst"),
+        ("Concave points (worst)", "concave points_worst"),
+        ("Symmetry (worst)", "symmetry_worst"),
+        ("Fractal dimension (worst)", "fractal_dimension_worst"),
+    ]
+
+    input_dict = {}
+
+    for label, key in slider_labels:
+        input_dict[key] = st.sidebar.slider(
+            label,
+            min_value=float(0),
+            max_value=float(data[key].max()),
+            value=float(data[key].mean())
+        )
+    
+    return input_dict
+
+
+def get_scaled_values(input_dict):
+    data = get_clean_data()
+    
+    X = data.drop(['diagnosis'], axis=1)
+    
+    scaled_dict = {}
+    
+    for key, value in input_dict.items():
+        max_val = X[key].max()
+        min_val = X[key].min()
+        scaled_value = (value - min_val) / (max_val - min_val)
+        scaled_dict[key] = scaled_value
+    
+    return scaled_dict
+    
+
+def get_radar_chart(input_data):
+    input_data = get_scaled_values(input_data)
+    
+    categories = ['Radius', 'Texture', 'Perimeter', 'Area', 
+                'Smoothness', 'Compactness', 
+                'Concavity', 'Concave Points',
+                'Symmetry', 'Fractal Dimension']
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatterpolar(
+        r=[
+            input_data['radius_mean'], input_data['texture_mean'], input_data['perimeter_mean'],
+            input_data['area_mean'], input_data['smoothness_mean'], input_data['compactness_mean'],
+            input_data['concavity_mean'], input_data['concave points_mean'], input_data['symmetry_mean'],
+            input_data['fractal_dimension_mean']
+        ],
+        theta=categories,
+        fill='toself',
+        name='Mean Value'
+    ))
+    fig.add_trace(go.Scatterpolar(
+        r=[
+            input_data['radius_se'], input_data['texture_se'], input_data['perimeter_se'], input_data['area_se'],
+            input_data['smoothness_se'], input_data['compactness_se'], input_data['concavity_se'],
+            input_data['concave points_se'], input_data['symmetry_se'],input_data['fractal_dimension_se']
+        ],
+        theta=categories,
+        fill='toself',
+        name='Standard Error'
+    ))
+    fig.add_trace(go.Scatterpolar(
+        r=[
+            input_data['radius_worst'], input_data['texture_worst'], input_data['perimeter_worst'],
+            input_data['area_worst'], input_data['smoothness_worst'], input_data['compactness_worst'],
+            input_data['concavity_worst'], input_data['concave points_worst'], input_data['symmetry_worst'],
+            input_data['fractal_dimension_worst']
+        ],
+        theta=categories,
+        fill='toself',
+        name='Worst Value'
+))
+
+    fig.update_layout(
+        polar=dict(
+        radialaxis=dict(
+            visible=True,
+            range=[0, 1]
+        )),
+        showlegend=True
+    )
+
+    return fig
+
+
+def add_predictions(input_data):
+    model = pickle.load(open("model/model.pkl", "rb"))
+    scaler = pickle.load(open("model/scaler.pkl", "rb"))
+    
+    input_array = np.array(list(input_data.values())).reshape(1, -1)
+    
+    input_array_scaled = scaler.transform(input_array)
+    
+    prediction = model.predict(input_array_scaled)
+    
+    st.subheader("Cell cluster prediction")
+    st.write("The cell cluster is:")
+    
+    if prediction[0] == 0:
+        st.write("<span class='diagnosis benign'>Benign</span>", unsafe_allow_html=True)
+    else:
+        st.write("<span class='diagnosis malicious'>Malicious</span>", unsafe_allow_html=True)
+    
+    
+    st.write("Probability of being benign: ", model.predict_proba(input_array_scaled)[0][0])
+    st.write("Probability of being malicious: ", model.predict_proba(input_array_scaled)[0][1])
+    
+    st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.");
+
+
+
 def protein_structure_prediction():
-    from st_speckmol import spec_plot
+    import streamlit as st
+    from st_speckmol import speck_plot
     import glob
 
     st.markdown('''# st-speckmol :package:
@@ -310,7 +484,7 @@ def protein_structure_prediction():
         f = open(ex_xyz, "r")
         ex_xyz = f.read()
         
-    res = spec_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True)
+    res = speck_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True)
 
     with st.sidebar.expander("Parameters", expanded=True):
         outl = st.checkbox('Outline', value=True)
@@ -325,7 +499,7 @@ def protein_structure_prediction():
         'bonds': bond, 'bondShade': bondShade,
         'brightness': brightness, 'relativeAtomScale': relativeAtomScale,
     }
-    res = spec_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True, _PARAMETER=_PARAMETERS)
+    res = speck_plot(ex_xyz, wbox_height="500px", wbox_width="800px", scroll=True, _PARAMETER=_PARAMETERS)
 
     st.markdown('''# st-speckmol :package:
     _A Streamlit **Component** for creating Speck molecular structures within Streamlit Web app._
@@ -347,11 +521,84 @@ def protein_structure_prediction():
     )
 
     st.code(_xyz.splitlines()[1])
-    res = spec_plot(_xyz)
+    res = speck_plot(_xyz)
 
+def Cryptocurrency_Price():
+    st.markdown('''# **Binance Price App**
+    A simple cryptocurrency price app pulling price data from *Binance API*.
+    ''')
+
+    st.header('**Selected Price**')
+    # Load market data from Binance API
+    df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
+
+    # Custom function for rounding values
+    def round_value(input_value):
+        if input_value.values > 1:
+            a = float(round(input_value, 2))
+        else:
+            a = float(round(input_value, 8))
+        return a
+
+    crpytoList = {
+        'Price 1': 'BTCBUSD',
+        'Price 2': 'ETHBUSD',
+        'Price 3': 'BNBBUSD',
+        'Price 4': 'XRPBUSD',
+        'Price 5': 'ADABUSD',
+        'Price 6': 'DOGEBUSD',
+        'Price 7': 'SHIBBUSD',
+        'Price 8': 'DOTBUSD',
+        'Price 9': 'MATICBUSD'
+    }
+    crypto_names = {
+        'BTCBUSD': 'Bitcoin to Binance USD',
+        'ETHBUSD': 'Ethereum to Binance USD',
+        'BNBBUSD': 'Binance Coin to Binance USD',
+        'XRPBUSD': 'Ripple to Binance USD',
+        'ADABUSD': 'Cardano to Binance USD',
+        'DOGEBUSD': 'Dogecoin to Binance USD',
+        'SHIBBUSD': 'Shiba Inu to Binance USD',
+        'DOTBUSD': 'Polkadot to Binance USD',
+        'MATICBUSD': 'Polygon (MATIC) to Binance USD'
+    }
+
+    col1, col2, col3 = st.columns(3)
+
+    for i in range(len(crpytoList.keys())):
+        selected_crypto_label = list(crpytoList.keys())[i]
+        selected_crypto_index = list(df.symbol).index(crpytoList[selected_crypto_label])
+        selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key = str(i))
+        col_df = df[df.symbol == selected_crypto]
+        col_price = round_value(col_df.weightedAvgPrice)
+        col_percent = f'{float(col_df.priceChangePercent)}%'
+        full_name = crypto_names[crpytoList[selected_crypto_label]]
+        border_style = "1px solid #ddd; padding: 10px; border-radius: 10px;"
+        if i < 3:
+            with col1:
+                st.info(full_name,icon="💰")
+                st.metric(selected_crypto, col_price, col_percent)
+        if 2 < i < 6:
+            with col2:
+                st.info(full_name,icon="💰")
+                st.metric(selected_crypto, col_price, col_percent)
+        if i > 5:
+            with col3:
+                st.info(full_name,icon="💰")
+                st.metric(selected_crypto, col_price, col_percent)
+
+    st.header('All Price')
+    st.markdown("### ₿ Explore the cryptocurrency prices and trends.")
+    with st.container():
+        st.subheader("🪙 Cryptocurrency Prices")
+        st.dataframe(df)
+        st.subheader("🪙 Price Trend")
+        st.markdown("## See the trend of cryptocurrency prices over time.")
+        st.line_chart(df.set_index('symbol')['weightedAvgPrice'])
 
 
 def chatbot_page():
+    import streamlit as st
     import random
     import time
 
@@ -416,17 +663,21 @@ def main():
     global logo
     logo = Image.open("images/Logo.png")
     st.set_page_config(page_title='~AnalysisMaster', page_icon=logo, layout="wide")
-    st.snow()
+    st.show()
     selected = main_menu()
 
     if selected == "Home":
         home_page()
     elif selected == "Stock Analysis":
         Stock_Performance();
+    elif selected == "Cancer Predict":
+        Cancer_Predict();
     elif selected == "Protein Structure":
         protein_structure_prediction();
+    elif selected == "Cryptocurrency Price":
+        Cryptocurrency_Price();
     elif selected == "Chatbot":
-        chatbot_page()
+        chatbot_page();
     elif selected == "Contact":
         contact_select();
 
