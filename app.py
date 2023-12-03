@@ -530,10 +530,7 @@ def Cryptocurrency_Price():
 
     st.header('**Selected Price**')
     # Load market data from Binance API
-   try:
-        df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
-   except Exception as e:
-        st.error(f"An error occurred while fetching data: {e}")
+    df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
 
     # Custom function for rounding values
     def round_value(input_value):
