@@ -534,7 +534,10 @@ def Cryptocurrency_Price():
         df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
     except Exception as e:
         st.error(f"An error occurred while fetching data: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            st.error(f"API Response: {e.response.text}")
         return
+        
 
     # Custom function for rounding values
     def round_value(input_value):
