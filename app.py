@@ -9,6 +9,7 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import pickle5 as pickle
 import plotly.graph_objects as go
+import requests
 
 def main_menu():
     selected = option_menu(
