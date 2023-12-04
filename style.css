@@ -6,6 +6,9 @@ body {
     background-position: center center;
     animation: animateBackground 10s linear infinite;
 }
+.st-emotion-cache-jrnu3u{
+    color-scheme: none;
+}
 
 footer {
     visibility: hidden;
