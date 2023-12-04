@@ -313,7 +313,11 @@ def protein_structure_prediction():
     _A Streamlit **Component** for creating Speck molecular structures within Streamlit Web app._
     ''')
      with open('style.css') as f:
-        st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+        st.markdown(f'<style>
+        .st-emotion-cache-jrnu3u {
+            color-scheme: none;
+        }    
+        </style>',unsafe_allow_html=True)
     x_files = glob.glob("DNA_Structure/*.xyz")
     with st.sidebar:
         ex_xyz = st.selectbox('Select a molecule', x_files)
