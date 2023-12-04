@@ -541,7 +541,13 @@ def Cryptocurrency_Price():
 
     st.header('**Selected Price**')
     # Load market data from Binance API
-    df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
+    # df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
+    headers = {
+        'Content-Type': 'application/json',  # Add any other required headers
+    }
+
+    url = 'https://api.binance.com/api/v3/ticker/24hr'
+    df = pd.read_json(url, headers=headers)
 
     # Custom function for rounding values
     def round_value(input_value):
