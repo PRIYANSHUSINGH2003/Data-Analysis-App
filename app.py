@@ -312,8 +312,7 @@ def protein_structure_prediction():
     st.markdown('''# st-speckmol :package:
     _A Streamlit **Component** for creating Speck molecular structures within Streamlit Web app._
     ''')
-     with open('style.css') as f:
-        st.markdown(f'<style>
+    st.markdown(f'<style>
         .st-emotion-cache-jrnu3u {
             color-scheme: none;
         }    
