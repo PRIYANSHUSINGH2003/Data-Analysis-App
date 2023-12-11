@@ -11,10 +11,11 @@ import pickle5 as pickle
 import plotly.graph_objects as go
 
 def main_menu():
-    selected = option_menu(
-        menu_title="Main Menu",
-        options=["Home", "Stock Analysis", "Cancer Predict","Protein Structure", "Cryptocurrency Price","Chatbot" ,"Contact"],
-    )
+    with st.expander("Main Menu"):
+        selected = st.radio(
+            "Select an option:",
+            ["Home", "Stock Analysis", "Cancer Predict", "Protein Structure", "Cryptocurrency Price", "Chatbot", "Contact"],
+        )
     return selected
 
 def home_page():
