@@ -613,23 +613,23 @@ def Cryptocurrency_Price():
     for i in range(len(crpytoList.keys())):
         selected_crypto_label = list(crpytoList.keys())[i]
         selected_crypto_index = list(df.symbol).index(crpytoList[selected_crypto_label])
-        selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key=str(i))
+        selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key = str(i))
         col_df = df[df.symbol == selected_crypto]
-        col_price = round_value(float(col_df.weightedAvgPrice))
-        # col_percent = f'{float(col_df.priceChangePercent)}%'
+        col_price = round_value(col_df.weightedAvgPrice)
+        col_percent = f'{float(col_df.priceChangePercent)}%'
         full_name = crypto_names[crpytoList[selected_crypto_label]]
         border_style = "1px solid #ddd; padding: 10px; border-radius: 10px;"
         if i < 3:
             with col1:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
         if 2 < i < 6:
             with col2:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
         if i > 5:
             with col3:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
 
     st.header('All Price')
