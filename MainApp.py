@@ -12,9 +12,9 @@ import plotly.graph_objects as go
 import time
 
 def main_menu():
-    selected = st.radio(
-        "Select an option:",
-        ["Home", "Stock Analysis", "Cancer Predict", "Protein Structure", "Cryptocurrency Price", "Chatbot", "Contact"],
+    selected = option_menu(
+        menu_title="Main Menu",
+        options=["Home", "Stock Analysis", "Cancer Predict","Protein Structure", "Cryptocurrency Price","Chatbot" ,"Contact"],
     )
     return selected
 
