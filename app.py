@@ -616,7 +616,6 @@ def Cryptocurrency_Price():
         selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key=str(i))
         col_df = df[df.symbol == selected_crypto]
         col_price = round_value(float(col_df.weightedAvgPrice))
-        col_percent = f'{float(col_df.priceChangePercent)}%'
         full_name = crypto_names[crpytoList[selected_crypto_label]]
         border_style = "1px solid #ddd; padding: 10px; border-radius: 10px;"
         if i < 3:
@@ -631,6 +630,7 @@ def Cryptocurrency_Price():
             with col3:
                 st.info(full_name, icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
+                
     st.header('All Price')
     st.markdown("### ₿ Explore the cryptocurrency prices and trends.")
     with st.container():
