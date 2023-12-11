@@ -560,29 +560,21 @@ def protein_structure_prediction():
         st.line_chart(df.set_index('symbol')['weightedAvgPrice'])
 
 def Cryptocurrency_Price():
-    import requests
     st.markdown('''# **Binance Price App**
     A simple cryptocurrency price app pulling price data from *Binance API*.
     ''')
 
     st.header('**Selected Price**')
-
-    # Load market data from Binance API using requests
-    url = 'https://api.binance.com/api/v3/ticker/24hr'
-    response = requests.get(url, verify=False)
-
-    if response.status_code == 200:
-        df = pd.DataFrame(response.json())
-    else:
-        st.error(f"Failed to fetch data. HTTP Status Code: {response.status_code}")
-        return
+    # Load market data from Binance API
+    df = pd.read_json('https://api.binance.com/api/v3/ticker/24hr')
 
     # Custom function for rounding values
     def round_value(input_value):
-        if input_value > 1:
-            return round(input_value, 2)
+        if input_value.values > 1:
+            a = float(round(input_value, 2))
         else:
-            return round(input_value, 8)
+            a = float(round(input_value, 8))
+        return a
 
     crpytoList = {
         'Price 1': 'BTCBUSD',
@@ -595,7 +587,6 @@ def Cryptocurrency_Price():
         'Price 8': 'DOTBUSD',
         'Price 9': 'MATICBUSD'
     }
-
     crypto_names = {
         'BTCBUSD': 'Bitcoin to Binance USD',
         'ETHBUSD': 'Ethereum to Binance USD',
@@ -613,25 +604,25 @@ def Cryptocurrency_Price():
     for i in range(len(crpytoList.keys())):
         selected_crypto_label = list(crpytoList.keys())[i]
         selected_crypto_index = list(df.symbol).index(crpytoList[selected_crypto_label])
-        selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key=str(i))
+        selected_crypto = st.sidebar.selectbox(selected_crypto_label, df.symbol, selected_crypto_index, key = str(i))
         col_df = df[df.symbol == selected_crypto]
-        col_price = round_value(float(col_df.weightedAvgPrice))
+        col_price = round_value(col_df.weightedAvgPrice)
         col_percent = f'{float(col_df.priceChangePercent)}%'
         full_name = crypto_names[crpytoList[selected_crypto_label]]
         border_style = "1px solid #ddd; padding: 10px; border-radius: 10px;"
         if i < 3:
             with col1:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
         if 2 < i < 6:
             with col2:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
         if i > 5:
             with col3:
-                st.info(full_name, icon="💰")
+                st.info(full_name,icon="💰")
                 st.metric(selected_crypto, col_price, col_percent)
-                
+
     st.header('All Price')
     st.markdown("### ₿ Explore the cryptocurrency prices and trends.")
     with st.container():
