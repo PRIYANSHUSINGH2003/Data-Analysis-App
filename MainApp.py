@@ -667,7 +667,10 @@ def main():
     global logo
     logo = Image.open("images/Logo.png")
     st.set_page_config(page_title='~AnalysisMaster', page_icon=logo, layout="wide")
-
+    with st.spinner('Wait for it...'):
+        time.sleep(5)
+    st.success('Done!')
+    
     selected = main_menu()
 
     if selected == "Home":
