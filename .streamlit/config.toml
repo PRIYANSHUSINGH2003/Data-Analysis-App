@@ -5,3 +5,7 @@ secondaryBackgroundColor="#0083b8"
 textColor="#ffffff"
 [deprecation]
 showPyplotGlobalUse = false
+
+[server]
+enableCORS = false
+enableXsrfProtection = false
